@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
@@ -39,7 +40,9 @@ public class Order implements Serializable {
 	// after java 8, use Instant is better to manipulating data fields
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="GMT")
 	private Instant moment;
-	// private OrderStatus orderStatus;
+	
+	// orderStatus internally is a class, but to external world is a number
+	private Integer orderStatus;
 	
 	// Association (no collection, one order must by only one client)
 	// N x 1 (order to client)
@@ -50,10 +53,12 @@ public class Order implements Serializable {
 	public Order() {		
 	}
 
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
+		//this.orderStatus = orderStatus;
+		setOrderStatus(orderStatus);
 		this.client = client;
 	}
 
@@ -71,6 +76,16 @@ public class Order implements Serializable {
 
 	public void setMoment(Instant moment) {
 		this.moment = moment;
+	}
+
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();
+		}
 	}
 
 	public User getClient() {
