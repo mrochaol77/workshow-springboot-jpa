@@ -1,5 +1,4 @@
 package com.educandoweb.course.services;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -28,4 +27,8 @@ public class UserService {
 		return repository.save(obj);
 	}
 
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
+	
 }
